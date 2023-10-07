@@ -7,12 +7,15 @@ import 'package:meals/widgets/meal_item.dart';
 class MealsScreen extends StatelessWidget {
   const MealsScreen({
     super.key,
-    required this.title,
+    this.title,
     required this.meals,
+    required this.onToogleFavorite,
   });
 
-  final String title;
+  final String? title; //could be null
   final List<Meal> meals;
+    //this is the function that we want to pass to the tabs state full
+  final void Function(Meal meal) onToogleFavorite;
 
   //Function that we use to send the meal data to the new screen
   void selectMeal(BuildContext context, meal) {
@@ -20,6 +23,7 @@ class MealsScreen extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => MealDetailsScreen(
           meal: meal,
+          onToogleFavorite: onToogleFavorite,
         ),
       ),
     );
@@ -59,9 +63,15 @@ class MealsScreen extends StatelessWidget {
         ),
       );
     }
+
+    if (title == null) {
+      return content;
+    }
+
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title!),
       ),
       body: content,
     );

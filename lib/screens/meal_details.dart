@@ -5,9 +5,13 @@ class MealDetailsScreen extends StatelessWidget {
   const MealDetailsScreen({
     super.key,
     required this.meal,
+    required this.onToogleFavorite,
   });
 
   final Meal meal;
+
+  //this is the function that we want to pass to the tabs state full
+  final void Function(Meal meal) onToogleFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +19,11 @@ class MealDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
+        actions: [
+          IconButton(onPressed: (){
+            onToogleFavorite(meal);
+          }, icon: const Icon(Icons.star))
+        ],
       ),
       //SingleChildScrollView gave us scroll feature and also the items are center
       body: SingleChildScrollView(
