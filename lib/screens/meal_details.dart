@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meals/providers/favorites_provider.dart';
 
-class MealDetailsScreen extends StatelessWidget {
+class MealDetailsScreen extends ConsumerWidget {
   const MealDetailsScreen({
     super.key,
     required this.meal,
-    required this.onToogleFavorite,
   });
 
   final Meal meal;
 
-  //this is the function that we want to pass to the tabs state full
-  final void Function(Meal meal) onToogleFavorite;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // return Scaffold because is a new screen
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
-          IconButton(onPressed: (){
-            onToogleFavorite(meal);
-          }, icon: const Icon(Icons.star))
+          IconButton(
+              onPressed: () {
+                final wasAdded = ref
+                    .read(favoriteMealsProvider.notifier)
+                    .toggleMealFavoriteStatus(meal);
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(wasAdded ? 'Meal added as favorite.' : 'Meal remove')));
+              },
+              icon: const Icon(Icons.star))
         ],
       ),
       //SingleChildScrollView gave us scroll feature and also the items are center
@@ -71,7 +76,8 @@ class MealDetailsScreen extends StatelessWidget {
             ),
             for (final step in meal.steps)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Text(
                   step,
                   textAlign: TextAlign.center,
