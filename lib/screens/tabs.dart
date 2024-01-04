@@ -56,32 +56,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final meals = ref.watch(mealsProvider);
 
-    final activeFilters = ref.watch(filtersProvider);
 
-    final availableMeals = meals.where((meal) {
-      if(activeFilters[Filter.glutenFree]! && !meal.isGlutenFree){
-        return false;
-      }
-
-      if(activeFilters[Filter.lactoseFree]! && !meal.isLactoseFree){
-        return false;
-      }
-
-      if(activeFilters[Filter.vegetarian]! && !meal.isVegetarian){
-        return false;
-      }
-
-      if(activeFilters[Filter.vegan]! && !meal.isVegan){
-        return false;
-      }
-
-      //we use this to return only the meals that we want
-      return true;
-
-    
-    }).toList();
+    final availableMeals = ref.watch(filteredMealsProvider);
 
     Widget activePage = CategoriesScreen(
       //this availableMeals helps to filter the meals that are selected

@@ -13,6 +13,10 @@ class MealDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteMeals = ref.watch(favoriteMealsProvider);
+
+    final bool isFavorite = favoriteMeals.contains(meal);
+
     // return Scaffold because is a new screen
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +31,7 @@ class MealDetailsScreen extends ConsumerWidget {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(wasAdded ? 'Meal added as favorite.' : 'Meal remove')));
               },
-              icon: const Icon(Icons.star))
+              icon: Icon(isFavorite ? Icons.star : Icons.star_border))
         ],
       ),
       //SingleChildScrollView gave us scroll feature and also the items are center
