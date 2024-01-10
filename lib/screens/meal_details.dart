@@ -23,26 +23,48 @@ class MealDetailsScreen extends ConsumerWidget {
         title: Text(meal.title),
         actions: [
           IconButton(
-              onPressed: () {
-                final wasAdded = ref
-                    .read(favoriteMealsProvider.notifier)
-                    .toggleMealFavoriteStatus(meal);
-                ScaffoldMessenger.of(context).clearSnackBars();
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(wasAdded ? 'Meal added as favorite.' : 'Meal remove')));
+            onPressed: () {
+              final wasAdded = ref
+                  .read(favoriteMealsProvider.notifier)
+                  .toggleMealFavoriteStatus(meal);
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                      wasAdded ? 'Meal added as favorite.' : 'Meal remove')));
+            },
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                //we have to return the transition
+                return RotationTransition(
+                  //tween treats their values as double
+                  turns: Tween<double>(begin: 0.8, end: 1).animate(animation),
+                  child: child,
+                );
               },
-              icon: Icon(isFavorite ? Icons.star : Icons.star_border))
+              child: Icon(
+                isFavorite ? Icons.star : Icons.star_border,
+                key: ValueKey(isFavorite),
+              ),
+            ),
+          ),
         ],
       ),
       //SingleChildScrollView gave us scroll feature and also the items are center
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.network(
-              meal.imageUrl,
-              height: 300,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            //hero is a widget that helps to create certain animation
+            // in this case we want to animate the image in the intro and outtro
+            //hero helps to animate a widget between diferent screenss
+            Hero(
+              tag: meal.id,
+              child: Image.network(
+                meal.imageUrl,
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(
               height: 14,

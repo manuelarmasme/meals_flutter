@@ -46,12 +46,15 @@ class MealItem extends StatelessWidget {
             //Utility helps us to fade out an image with the placeholder
             // display and image when it show ups create a fade in efect
             //Memory image help
-            FadeInImage(
-              fit: BoxFit.cover,
-              height: 200,
-              width: double.infinity, //use as much of with that it has
-              placeholder: MemoryImage(kTransparentImage),
-              image: NetworkImage(meal.imageUrl),
+            Hero(
+              tag: meal.id,
+              child: FadeInImage(
+                fit: BoxFit.cover,
+                height: 200,
+                width: double.infinity, //use as much of with that it has
+                placeholder: MemoryImage(kTransparentImage),
+                image: NetworkImage(meal.imageUrl),
+              ),
             ),
 
             //For positioning another widget in front other we use Positioned
